@@ -54,6 +54,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.create_actions()
         self.create_menus()
+        self.create_status_bar()
 
         self.resize(900, 800)
         self.setWindowTitle('Cryptix - a0.0.1')
@@ -61,25 +62,57 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
     def create_actions(self):
-        self.openAct = QtWidgets.QAction("&Open file", self,
-        shortcut=QtGui.QKeySequence.Open,
-        statusTip="Open an existing file", triggered=self.open)
+        self.openAct = QtWidgets.QAction('&Open file', self,
+            shortcut=QtGui.QKeySequence.Open,
+            statusTip="Open an existing file",
+            triggered=self.open)
 
-        self.aboutAct = QtWidgets.QAction("&About", self,
-        statusTip="Displays info about this software",
-        triggered=self.about)
+        self.guideAct = QtWidgets.QAction('&Guide', self,
+            shortcut='Ctrl + H',
+            statusTip="Displays a quick How-To",
+            triggered=self.guide)
+
+        self.aboutAct = QtWidgets.QAction('&About', self,
+            statusTip="Displays info about this software",
+            triggered=self.about)
+
+        self.aboutQtAct = QtWidgets.QAction('About &Qt', self,
+            statusTip="Show the Qt library's About box",
+            triggered=QtWidgets.qApp.aboutQt)
 
     def create_menus(self):
         self.fileMenu = self.menuBar().addMenu('&File')
         self.fileMenu.addAction(self.openAct)
 
-        self.helpMenu = self.menuBar().addMenu("&Help")
+        self.helpMenu = self.menuBar().addMenu('&Help')
+        self.helpMenu.addAction(self.guideAct)
+        self.helpMenu.addSeparator();
         self.helpMenu.addAction(self.aboutAct)
+        self.helpMenu.addAction(self.aboutQtAct)
+
+    def create_status_bar(self):
+        self.statusBar().showMessage("Ready")
 
     def open(self):
         fileName, filtr = QtWidgets.QFileDialog.getOpenFileName(self)
         if fileName:
             self.loadFile(fileName)
+
+    def guide(self):
+        QtWidgets.QMessageBox.information(self, "How to use Cryptix",
+                "To encrypt or decrypt text : paste it respectively"
+                " in the first and second text block, and press"
+                " the according button.\n\n"
+
+                "To change the current algorithm, use the popup list"
+                " on the left.\n\n"
+
+                "Depending of algorithms, you might change specific"
+                " settings (You dispose of one 'custom slot') if"
+                " possible.\n\n"
+
+                "A quick memo for the current algorithm is"
+                " accessible with the button next to the list.")
 
     def about(self):
         QtWidgets.QMessageBox.about(self, "About Cryptix",
