@@ -1,64 +1,42 @@
-from PySide2 import QtWidgets, QtGui, QtCore
-# from PySide2.QtUiTools import QUiLoader
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#####################################################################
 
-# mainWindow = QWidget()
-# mainWindow.resize(550, 400)
-# file = QtCore.QFile("Cryptix1.ui")
-# file.open(QtCore.QFile.ReadOnly)
+# FrenchMasterSword, Cryptix, 2018
+#####################################################################
 
-# loader = QUiLoader()
-# mainWindow = loader.load(file)
-# mainWindow.resize(1064, 900)
-# mainWindow.setWindowTitle('Cryptix - a0.0.1')
-# mainWindow.setWindowIcon(QtGui.QIcon('lock.png'))
-# mainWindow.show()
+from PySide2 import QtWidgets, QtGui
+import encrypt
 
-# encryptTextWid = QPlainTextEdit()
-# algoWid = QComboBox()
-# algoWid.show()
-
-# def hello():
-#     print("Hello !")
-
-
-# hbtn = QPushButton("Say hello")
-# hbtn.clicked.connect(hello)
-# hbtn.show()
-
-# qbtn = QPushButton("Quit")
-# qbtn.clicked.connect(app.exit)
-# qbtn.show()
-
-
-# label = QLabel("<font color=red size=40>Hey there</font>")
-# label.show()
-
-# msg_box = QMessageBox()
-# msg_box.setText("<font color=black size=40>Hello World !</font>")
-# msg_box.exec_()
-
-# combo = QComboBox()
-# combo.addItem("Classic (custom)")
-# combo.addItem("Cesar")
-# combo.addItem("Polybe")
-# combo.addItem("ADFVGX")
-# combo.addItem("Vigenere")
-# combo.setGeometry(300, 300, 300, 300)
-# QtCore.QObject.connect(combo, QtCore.SIGNAL("clicked()"), app)
-
+algoList = ['Simple', 'Cesar', 'Polybe', 'ADFGVX', 'Vigenere']
 
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
 
+        widget = QtWidgets.QWidget()
+        self.setCentralWidget(widget)
+
         self.create_actions()
         self.create_menus()
         self.create_status_bar()
+        self.create_algo_box()
+        self.create_crypto_box()
+
+        mainLayout = QtWidgets.QVBoxLayout()
+        mainLayout.setSpacing(10)
+
+        mainLayout.addWidget(self.algoBox)
+        mainLayout.addWidget(self.cryptoBox)
 
         self.resize(900, 800)
-        self.setWindowTitle('Cryptix - a0.0.1')
+        self.setWindowTitle('Cryptix')
         self.setWindowIcon(QtGui.QIcon('lock.png'))
+
+        widget.setLayout(mainLayout)
+
         self.show()
 
     def create_actions(self):
@@ -68,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
             triggered=self.open)
 
         self.guideAct = QtWidgets.QAction('&Guide', self,
-            shortcut='Ctrl + H',
+            shortcut='Ctrl+H',
             statusTip="Displays a quick How-To",
             triggered=self.guide)
 
@@ -81,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow):
             triggered=QtWidgets.qApp.aboutQt)
 
     def create_menus(self):
+
         self.fileMenu = self.menuBar().addMenu('&File')
         self.fileMenu.addAction(self.openAct)
 
@@ -92,6 +71,47 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def create_status_bar(self):
         self.statusBar().showMessage("Ready")
+
+    def create_algo_box(self):
+        self.algoBox = QtWidgets.QGroupBox('Algorithm')
+        layout = QtWidgets.QHBoxLayout()
+
+        self.algoCombo = QtWidgets.QComboBox()
+        self.algoCombo.addItems(algoList)
+
+        self.algoHelp = QtWidgets.QPushButton('&Reminder',
+        shortcut='Ctrl+R')
+
+        layout.addWidget(self.algoCombo)
+        layout.addWidget(self.algoHelp)
+
+        self.algoBox.setLayout(layout)
+
+    def create_crypto_box(self):
+        self.cryptoBox = QtWidgets.QGroupBox()
+        layout = QtWidgets.QGridLayout()
+
+        self.encryptEdit = QtWidgets.QTextEdit()
+        self.encryptEdit.setPlaceholderText('Encrypt text')
+
+        self.decryptEdit = QtWidgets.QTextEdit()
+        self.decryptEdit.setPlaceholderText('Decrypt text')
+
+        self.keyEdit = QtWidgets.QLineEdit()
+        self.keyEdit.setPlaceholderText('Key if needed')
+
+        self.encryptBtn = QtWidgets.QPushButton('&Encrypt',
+        shortcut='Ctrl+E')
+        self.decryptBtn = QtWidgets.QPushButton('&Decrypt',
+        shortcut='Ctrl+D')
+
+        layout.addWidget(self.encryptEdit, 0, 0)
+        layout.addWidget(self.decryptEdit, 0, 1)
+        layout.addWidget(self.keyEdit, 1, 0, 1, 2)
+        layout.addWidget(self.encryptBtn, 2, 0)
+        layout.addWidget(self.decryptBtn, 2, 1)
+
+        self.cryptoBox.setLayout(layout)
 
     def open(self):
         fileName, filtr = QtWidgets.QFileDialog.getOpenFileName(self)
