@@ -6,7 +6,7 @@
 # FrenchMasterSword, Cryptix, 2018
 #####################################################################
 
-from PySide2 import QtWidgets, QtGui
+from PySide2 import QtWidgets, QtGui, QtCore
 import encrypt
 
 algoDict = {
@@ -43,8 +43,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowIcon(QtGui.QIcon('lock.png'))
 
         widget.setLayout(mainLayout)
-
-        self.show()
 
     def create_actions(self):
         self.openAct = QtWidgets.QAction('&Open file', self,
@@ -168,11 +166,20 @@ class MainWindow(QtWidgets.QMainWindow):
         result = algoDict[algo](self, False, text, key=key)
 
         if type(result) == str:
+            # Avoid erasing input if incorrect
             self.encryptEdit.setPlainText(result)
 
-    def load_file(file):
-        pass
+    def load_file(self, fileName):
+        file = QtCore.QFile(fileName)
+        if not file.open(QtCore.QFile.ReadOnly | QtCore.QFile.Text):
+            QtWidgets.QMessageBox.warning(self, "Cryptix",
+            f"Cannot read {fileName} :\n{file.errorString()}")
+            return
 
+        stream = QtCore.QTextStream(file)
+        self.encryptEdit.setPlainText(stream.readAll())
+
+        self.statusBar().showMessage("File loaded", 2000)
 
 if __name__ == '__main__':
 
@@ -180,4 +187,5 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
     main = MainWindow()
+    main.show()
     sys.exit(app.exec_())
