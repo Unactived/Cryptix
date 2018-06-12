@@ -9,7 +9,14 @@
 from PySide2 import QtWidgets, QtGui
 import encrypt
 
-algoList = ['Simple', 'Cesar', 'Polybe', 'ADFGVX', 'Vigenere']
+algoDict = {
+    'Simple':   encrypt.simple,
+    'Caesar':   encrypt.caesar,
+    'Polybe':   encrypt.polybe,
+    'ADFGVX':   encrypt.adfgvx,
+    'Vigenere': encrypt.vigenere,
+    'Morse':    encrypt.morse
+}
 
 class MainWindow(QtWidgets.QMainWindow):
 
@@ -77,10 +84,10 @@ class MainWindow(QtWidgets.QMainWindow):
         layout = QtWidgets.QHBoxLayout()
 
         self.algoCombo = QtWidgets.QComboBox()
-        self.algoCombo.addItems(algoList)
+        self.algoCombo.addItems([*algoDict])
 
         self.algoHelp = QtWidgets.QPushButton('&Reminder',
-        shortcut='Ctrl+R')
+        shortcut='Ctrl+R', clicked=self.reminder)
 
         layout.addWidget(self.algoCombo)
         layout.addWidget(self.algoHelp)
@@ -101,9 +108,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.keyEdit.setPlaceholderText('Key if needed')
 
         self.encryptBtn = QtWidgets.QPushButton('&Encrypt',
-        shortcut='Ctrl+E')
+        shortcut='Ctrl+E', clicked=self.encrypt)
+
         self.decryptBtn = QtWidgets.QPushButton('&Decrypt',
-        shortcut='Ctrl+D')
+        shortcut='Ctrl+D', clicked=self.decrypt)
 
         layout.addWidget(self.encryptEdit, 0, 0)
         layout.addWidget(self.decryptEdit, 0, 1)
@@ -116,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def open(self):
         fileName, filtr = QtWidgets.QFileDialog.getOpenFileName(self)
         if fileName:
-            self.loadFile(fileName)
+            self.load_file(fileName)
 
     def guide(self):
         QtWidgets.QMessageBox.information(self, "How to use Cryptix",
@@ -138,6 +146,32 @@ class MainWindow(QtWidgets.QMainWindow):
         QtWidgets.QMessageBox.about(self, "About Cryptix",
                 "<b>Cryptix</b> is a small tool for quick encrypting and"
                 " decrypting of small texts, using known basic methods.")
+
+    def reminder(self):
+        pass
+
+    def encrypt(self):
+        algo = self.algoCombo.currentText()
+        text = self.encryptEdit.toPlainText()
+        key = self.keyEdit.text()
+
+        result = algoDict[algo](self, True, text, key=key)
+
+        if type(result) == str:
+            self.decryptEdit.setPlainText(result)
+
+    def decrypt(self):
+        algo = self.algoCombo.currentText()
+        text = self.decryptEdit.toPlainText()
+        key = self.keyEdit.text()
+
+        result = algoDict[algo](self, False, text, key=key)
+
+        if type(result) == str:
+            self.encryptEdit.setPlainText(result)
+
+    def load_file(file):
+        pass
 
 
 if __name__ == '__main__':
