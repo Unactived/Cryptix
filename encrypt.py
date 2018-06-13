@@ -16,7 +16,7 @@
 #
 # They should return a string
 
-from PySide2 import QtWidgets, QtGui
+from PySide2.QtWidgets import QMessageBox
 
 def simple(self, encrypt, text, key=''):
     pass
@@ -31,7 +31,7 @@ def caesar(self, encrypt, text, key='0'):
         try:
             key = int(key)
         except ValueError:
-            return QtWidgets.QMessageBox.warning(self, "Caesar Warning", "You should enter a valid number as key.")
+            return QMessageBox.warning(self, "Caesar Warning", "You should enter a valid number as key.")
 
         if not encrypt:
             key = - key
@@ -48,7 +48,7 @@ def caesar(self, encrypt, text, key='0'):
         return result
 
     except Exception as e:
-        return QtWidgets.QMessageBox.critical(self, "Caesar error", repr(e))
+        return QMessageBox.critical(self, "Caesar error", repr(e))
 
 def morse(self, encrypt, text, **kwargs):
     morseCode = {
@@ -115,7 +115,7 @@ def morse(self, encrypt, text, **kwargs):
     result = ''
     try:
         if '\n' in text:
-            return QtWidgets.QMessageBox.warning(self, "Morse Warning",
+            return QMessageBox.warning(self, "Morse Warning",
              "You can only write on a line")
 
         if encrypt:
@@ -134,11 +134,11 @@ def morse(self, encrypt, text, **kwargs):
         return result[:-1] # remove superficial ending space
 
     except KeyError as e:
-        return QtWidgets.QMessageBox.warning(self, "Morse error",
+        return QMessageBox.warning(self, "Morse error",
         f"<b>{e.args[0]}</b> is not recognized in standard morse code")
 
     except Exception as e:
-        return QtWidgets.QMessageBox.critical(self, "Morse error",
+        return QMessageBox.critical(self, "Morse error",
          repr(e))
 
 def polybe(self, encrypt, text, **kwargs):

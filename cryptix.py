@@ -6,24 +6,45 @@
 # FrenchMasterSword, Cryptix, 2018
 #####################################################################
 
-from PySide2 import QtWidgets, QtGui, QtCore
+from PySide2.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QAction,
+    QGroupBox, QHBoxLayout, QComboBox, QPushButton, QGridLayout, QTextEdit,
+    QLineEdit, QDialog, QLabel, QApplication, QMessageBox, QFileDialog)
+
+
+
+from PySide2.QtGui          import QIcon, QPixmap, QKeySequence
+
+from PySide2.QtCore         import QFile, QTextStream
 import encrypt
 
 algoDict = {
-    'Simple':   (encrypt.simple,),
-    'Caesar':   (encrypt.caesar,),
-    'Polybe':   (encrypt.polybe,),
-    'ADFGVX':   (encrypt.adfgvx,),
-    'Vigenere': (encrypt.vigenere,),
-    'Morse':    (encrypt.morse,)
+    'Simple':   (encrypt.simple,
+    "Simply replace letters in the alphabet with those in the key."
+    " You don't have to enter a complete one, as it will be generated from it."),
+
+    'Caesar':   (encrypt.caesar,
+    "Shifts the text's letter in the alphabet of the number given as key."),
+
+    'Polybe':   (encrypt.polybe,
+    "Replace letters by its abscissa and ordinate in a grid."),
+
+    'ADFGVX':   (encrypt.adfgvx,
+    "Same as Polybe, but grid is indexed with these 6 letters,"
+    " and also encrypt digits."),
+
+    'Vigenere': (encrypt.vigenere,
+    "Uses the key and a grid to encrypt."),
+
+    'Morse':    (encrypt.morse,
+    "Transpose in standard morse code. Currently only one line.")
 }
 
-class MainWindow(QtWidgets.QMainWindow):
+class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
 
-        widget = QtWidgets.QWidget()
+        widget = QWidget()
         self.setCentralWidget(widget)
 
         self.create_actions()
@@ -32,7 +53,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.create_algo_box()
         self.create_crypto_box()
 
-        mainLayout = QtWidgets.QVBoxLayout()
+        mainLayout = QVBoxLayout()
         mainLayout.setSpacing(10)
 
         mainLayout.addWidget(self.algoBox)
@@ -40,28 +61,28 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.resize(900, 800)
         self.setWindowTitle('Cryptix')
-        self.setWindowIcon(QtGui.QIcon('lock.png'))
+        self.setWindowIcon(QIcon('lock.png'))
 
         widget.setLayout(mainLayout)
 
     def create_actions(self):
-        self.openAct = QtWidgets.QAction('&Open file', self,
-            shortcut=QtGui.QKeySequence.Open,
+        self.openAct = QAction('&Open file', self,
+            shortcut=QKeySequence.Open,
             statusTip="Open an existing file",
             triggered=self.open)
 
-        self.guideAct = QtWidgets.QAction('&Guide', self,
+        self.guideAct = QAction('&Guide', self,
             shortcut='Ctrl+H',
             statusTip="Displays a quick How-To",
             triggered=self.guide)
 
-        self.aboutAct = QtWidgets.QAction('&About', self,
+        self.aboutAct = QAction('&About', self,
             statusTip="Displays info about this software",
             triggered=self.about)
 
-        self.aboutQtAct = QtWidgets.QAction('About &Qt', self,
+        self.aboutQtAct = QAction('About &Qt', self,
             statusTip="Show the Qt library's About box",
-            triggered=QtWidgets.qApp.aboutQt)
+            triggered=self.aboutQt)
 
     def create_menus(self):
 
@@ -78,13 +99,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.statusBar().showMessage("Ready")
 
     def create_algo_box(self):
-        self.algoBox = QtWidgets.QGroupBox('Cipher')
-        layout = QtWidgets.QHBoxLayout()
+        self.algoBox = QGroupBox('Cipher')
+        layout = QHBoxLayout()
 
-        self.algoCombo = QtWidgets.QComboBox()
+        self.algoCombo = QComboBox()
         self.algoCombo.addItems([*algoDict])
 
-        self.algoHelp = QtWidgets.QPushButton('&Reminder',
+        self.algoHelp = QPushButton('&Reminder',
         shortcut='Ctrl+R', clicked=self.reminder)
 
         layout.addWidget(self.algoCombo)
@@ -93,22 +114,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.algoBox.setLayout(layout)
 
     def create_crypto_box(self):
-        self.cryptoBox = QtWidgets.QGroupBox()
-        layout = QtWidgets.QGridLayout()
+        self.cryptoBox = QGroupBox()
+        layout = QGridLayout()
 
-        self.encryptEdit = QtWidgets.QTextEdit()
+        self.encryptEdit = QTextEdit()
         self.encryptEdit.setPlaceholderText('Encrypt text')
 
-        self.decryptEdit = QtWidgets.QTextEdit()
+        self.decryptEdit = QTextEdit()
         self.decryptEdit.setPlaceholderText('Decrypt text')
 
-        self.keyEdit = QtWidgets.QLineEdit()
+        self.keyEdit = QLineEdit()
         self.keyEdit.setPlaceholderText('Key if needed')
 
-        self.encryptBtn = QtWidgets.QPushButton('&Encrypt',
+        self.encryptBtn = QPushButton('&Encrypt',
         shortcut='Ctrl+E', clicked=self.encrypt)
 
-        self.decryptBtn = QtWidgets.QPushButton('&Decrypt',
+        self.decryptBtn = QPushButton('&Decrypt',
         shortcut='Ctrl+D', clicked=self.decrypt)
 
         layout.addWidget(self.encryptEdit, 0, 0)
@@ -120,12 +141,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.cryptoBox.setLayout(layout)
 
     def open(self):
-        fileName, filtr = QtWidgets.QFileDialog.getOpenFileName(self)
+        fileName, filtr = QFileDialog.getOpenFileName(self)
         if fileName:
             self.load_file(fileName)
 
     def guide(self):
-        QtWidgets.QMessageBox.information(self, "How to use Cryptix",
+        QMessageBox.information(self, "How to use Cryptix",
                 "To encrypt or decrypt text : paste it respectively"
                 " in the first and second text block, and press"
                 " the according button.\n\n"
@@ -133,20 +154,38 @@ class MainWindow(QtWidgets.QMainWindow):
                 "To change the current cipher, use the popup list"
                 " on the left.\n\n"
 
-                "Depending of ciphers, you might change specific"
-                " settings (You dispose of one 'custom slot') if"
-                " possible.\n\n"
+                "Depending of ciphers, you might change specific settings.\n\n"
 
                 "A quick reminder for the current cipher is"
                 " accessible with the button next to the list.")
 
     def about(self):
-        QtWidgets.QMessageBox.about(self, "About Cryptix",
+        QMessageBox.about(self, "About Cryptix",
                 "<b>Cryptix</b> is a small tool for quick encrypting and"
                 " decrypting of small texts, using known basic methods.")
 
+    def aboutQt(self):
+        QMessageBox.aboutQt(self, "About Qt")
+
     def reminder(self):
-        pass
+        box = QDialog(self)
+
+        algo = self.algoCombo.currentText()
+
+        pixmap = QPixmap(f'images/{algo.lower()}.png')
+        labelImage = QLabel()
+        labelImage.setPixmap(pixmap)
+
+        labelText = QLabel(algoDict[algo][1])
+
+        box.setWindowTitle(f"{algo} reminder")
+
+        layout = QVBoxLayout()
+        layout.addWidget(labelImage)
+        layout.addWidget(labelText)
+
+        box.setLayout(layout)
+        box.show()
 
     def encrypt(self):
         algo = self.algoCombo.currentText()
@@ -156,6 +195,7 @@ class MainWindow(QtWidgets.QMainWindow):
         result = algoDict[algo][0](self, True, text, key=key)
 
         if type(result) == str:
+            # Avoid erasing input if incorrect
             self.decryptEdit.setPlainText(result)
 
     def decrypt(self):
@@ -170,13 +210,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.encryptEdit.setPlainText(result)
 
     def load_file(self, fileName):
-        file = QtCore.QFile(fileName)
-        if not file.open(QtCore.QFile.ReadOnly | QtCore.QFile.Text):
-            QtWidgets.QMessageBox.warning(self, "Cryptix",
+        file = QFile(fileName)
+        if not file.open(QFile.ReadOnly | QFile.Text):
+            QMessageBox.warning(self, "Cryptix",
             f"Cannot read {fileName} :\n{file.errorString()}")
             return
 
-        stream = QtCore.QTextStream(file)
+        stream = QTextStream(file)
         self.encryptEdit.setPlainText(stream.readAll())
 
         self.statusBar().showMessage("File loaded", 2000)
@@ -185,7 +225,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     main = MainWindow()
     main.show()
     sys.exit(app.exec_())
