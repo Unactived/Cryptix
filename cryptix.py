@@ -192,7 +192,7 @@ class MainWindow(QMainWindow):
         text = self.encryptEdit.toPlainText()
         key = self.keyEdit.text()
 
-        result = algoDict[algo][0](self, True, text, key=key)
+        result = algoDict[algo][0](self, True, text, key)
 
         if type(result) == str:
             # Avoid erasing input if incorrect
@@ -203,7 +203,7 @@ class MainWindow(QMainWindow):
         text = self.decryptEdit.toPlainText()
         key = self.keyEdit.text()
 
-        result = algoDict[algo][0](self, False, text, key=key)
+        result = algoDict[algo][0](self, False, text, key)
 
         if type(result) == str:
             # Avoid erasing input if incorrect
