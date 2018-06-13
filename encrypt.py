@@ -18,6 +18,25 @@
 
 from PySide2.QtWidgets import QMessageBox
 
+def _check_alphabet(text):
+    """
+    Checks that given text is
+
+    """
+
+def _create_alphabet(key):
+    """
+    generate a transposition alphabet
+
+    """
+
+    alphabet = key.upper()
+    for i in range(65, 91):
+        if not chr(i) in alphabet:
+            alphabet += chr(i)
+
+    return alphabet
+
 def simple(self, encrypt, text, key):
     pass
 
@@ -142,7 +161,46 @@ def morse(self, encrypt, text, key):
          repr(e))
 
 def polybe(self, encrypt, text, key):
+    try:
+        for char in key[:26]:
+            if not (ord(char.upper()) > 64 and ord(char.upper()) < 91):
+                return QMessageBox.warning(self, "Polybe warning",
+                "Key should only be composed of alphabetic letters.")
+        key = _create_alphabet(key.upper()[:26])
 
+        # Removing 'J' to get 25 letters
+        # TODO: Choose this letter or offer to remove 'W' instead
+        key = key[:key.index('J')] + key[key.index('J')+1:]
+
+        polybe = []
+
+        # List of 5 lists of 5 characters
+        for i in range(5):
+            list = []
+            for y in range(5*i, 5*(i+1)):
+                list.append(key[y])
+            polybe.append(list)
+
+        result = ''
+        if encrypt:
+            i = 0
+            for char in text.upper():
+                if char == 'J':
+                    char = 'I'
+                char = str((key.index(char)+1)//5 + 1) + str((key.index(char)+1)%5)
+                result += char
+        else:
+            pass
+            i = 0
+            while i < len(text):
+                char = text[i]
+                if char.isdigit():
+                    char = char
+        return result
+
+    except Exception as e:
+        return QMessageBox.critical(self, "Polybe error",
+        repr(e))
 
 def adfgvx(self, encrypt, text, key):
     pass
