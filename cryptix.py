@@ -78,7 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.statusBar().showMessage("Ready")
 
     def create_algo_box(self):
-        self.algoBox = QtWidgets.QGroupBox('Algorithm')
+        self.algoBox = QtWidgets.QGroupBox('Cipher')
         layout = QtWidgets.QHBoxLayout()
 
         self.algoCombo = QtWidgets.QComboBox()
@@ -130,14 +130,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 " in the first and second text block, and press"
                 " the according button.\n\n"
 
-                "To change the current algorithm, use the popup list"
+                "To change the current cipher, use the popup list"
                 " on the left.\n\n"
 
-                "Depending of algorithms, you might change specific"
+                "Depending of ciphers, you might change specific"
                 " settings (You dispose of one 'custom slot') if"
                 " possible.\n\n"
 
-                "A quick memo for the current algorithm is"
+                "A quick reminder for the current cipher is"
                 " accessible with the button next to the list.")
 
     def about(self):
