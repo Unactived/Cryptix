@@ -10,12 +10,12 @@ from PySide2 import QtWidgets, QtGui, QtCore
 import encrypt
 
 algoDict = {
-    'Simple':   encrypt.simple,
-    'Caesar':   encrypt.caesar,
-    'Polybe':   encrypt.polybe,
-    'ADFGVX':   encrypt.adfgvx,
-    'Vigenere': encrypt.vigenere,
-    'Morse':    encrypt.morse
+    'Simple':   (encrypt.simple,),
+    'Caesar':   (encrypt.caesar,),
+    'Polybe':   (encrypt.polybe,),
+    'ADFGVX':   (encrypt.adfgvx,),
+    'Vigenere': (encrypt.vigenere,),
+    'Morse':    (encrypt.morse,)
 }
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -153,7 +153,7 @@ class MainWindow(QtWidgets.QMainWindow):
         text = self.encryptEdit.toPlainText()
         key = self.keyEdit.text()
 
-        result = algoDict[algo](self, True, text, key=key)
+        result = algoDict[algo][0](self, True, text, key=key)
 
         if type(result) == str:
             self.decryptEdit.setPlainText(result)
@@ -163,7 +163,7 @@ class MainWindow(QtWidgets.QMainWindow):
         text = self.decryptEdit.toPlainText()
         key = self.keyEdit.text()
 
-        result = algoDict[algo](self, False, text, key=key)
+        result = algoDict[algo][0](self, False, text, key=key)
 
         if type(result) == str:
             # Avoid erasing input if incorrect
