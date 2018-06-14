@@ -30,7 +30,10 @@ def _create_alphabet(key):
 
     """
 
-    alphabet = key.upper()
+    alphabet = ''
+    for letter in key.upper():
+        if not letter in alphabet:
+            alphabet += letter
     for i in range(65, 91):
         if not chr(i) in alphabet:
             alphabet += chr(i)
@@ -171,7 +174,7 @@ def polybe(self, encrypt, text, key):
         # Removing 'J' to get 25 letters
         # TODO: Choose this letter or offer to remove 'W' instead
         key = key[:key.index('J')] + key[key.index('J')+1:]
-        
+
         result = ''
         if encrypt:
             for char in text.upper():
@@ -190,7 +193,7 @@ def polybe(self, encrypt, text, key):
                 for y in range(5*i, 5*(i+1)):
                     list.append(key[y])
                 polybe.append(list)
-            # print(polybe)
+
             i = 0
             while i < len(text):
                 char = text[i]
@@ -199,7 +202,6 @@ def polybe(self, encrypt, text, key):
                     char = polybe[int(text[i])-1][int(text[i+1])-1]
                     i += 1
                 result += char
-                # print(char)
                 i += 1
 
         return result
