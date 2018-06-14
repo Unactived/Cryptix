@@ -9,12 +9,8 @@
 from PySide2.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QAction,
     QGroupBox, QHBoxLayout, QComboBox, QPushButton, QGridLayout, QTextEdit,
     QLineEdit, QDialog, QLabel, QApplication, QMessageBox, QFileDialog)
-
-
-
-from PySide2.QtGui          import QIcon, QPixmap, QKeySequence
-
-from PySide2.QtCore         import QFile, QTextStream
+from PySide2.QtGui import QIcon, QPixmap, QKeySequence
+from PySide2.QtCore import QFile, QTextStream, Qt
 import encrypt
 
 algoDict = {
@@ -26,7 +22,10 @@ algoDict = {
     "Shifts the text's letter in the alphabet of the number given as key."),
 
     'Polybe':   (encrypt.polybe,
-    "Replace letters by its abscissa and ordinate in a grid."),
+    "Replace letters by their abscissa and ordinate in a grid. If a key is"
+    " given, it starts filling the grid, and finishes with the rest of the"
+    " alphabet.\nThe second grid is an example with 'CRYPTIX' used as key."
+    " As there are only 25 squares, J is removed and replaced with I."),
 
     'ADFGVX':   (encrypt.adfgvx,
     "Same as Polybe, but grid is indexed with these 6 letters,"
@@ -175,8 +174,10 @@ class MainWindow(QMainWindow):
         pixmap = QPixmap(f'images/{algo.lower()}.png')
         labelImage = QLabel()
         labelImage.setPixmap(pixmap)
+        labelImage.setAlignment(Qt.AlignHCenter)
 
         labelText = QLabel(algoDict[algo][1])
+        labelText.setAlignment(Qt.AlignJustify)
 
         box.setWindowTitle(f"{algo} reminder")
 
