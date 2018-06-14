@@ -35,7 +35,7 @@ algoDict = {
     "Uses the key and a grid to encrypt."),
 
     'Morse':    (encrypt.morse,
-    "Transpose in standard morse code. Currently only one line.")
+    "Transpose in standard morse code.")
 }
 
 class MainWindow(QMainWindow):

@@ -32,7 +32,8 @@ def _create_alphabet(key):
 
     alphabet = ''
     for letter in key.upper():
-        if not letter in alphabet:
+        # Avoid repetitions of letters
+        if letter.isalpha() and not letter in alphabet:
             alphabet += letter
     for i in range(65, 91):
         if not chr(i) in alphabet:
@@ -134,34 +135,40 @@ def morse(self, encrypt, text, key):
 
     inverseMorseCode = dict((v,k) for (k,v) in morseCode.items())
 
-    result = ''
     try:
-        if '\n' in text:
-            return QMessageBox.warning(self, "Morse Warning",
-             "You can only write on a line")
-
         if encrypt:
+            result = ''
             for char in text:
-                result += morseCode[char.upper()]
-                result += ' '
+                if char == '\n':
+                    result = result[:-1] + char
+                else:
+                    result += morseCode[char.upper()]
+                    result += ' '
+            result = result[:-1]
 
         else:
-            textList = text.split('/')
-            for word in textList:
-                word = word.strip(' ')
-                for char in word.split(' '):
-                    result += inverseMorseCode[char]
-                result += ' '
+            result = []
+            textLines = text.split('\n')
+            for line in textLines:
+                resultLine = ''
+                textList = line.split('/')
+                for word in textList:
+                    word = word.strip(' ')
+                    for char in word.split(' '):
+                        resultLine += inverseMorseCode[char]
+                    resultLine += ' '
+                resultLine = resultLine[:-1] # remove superficial ending space
+                result.append(resultLine)
+            result = '\n'.join(result)
 
-        return result[:-1] # remove superficial ending space
+        return result
 
     except KeyError as e:
         return QMessageBox.warning(self, "Morse error",
         f"<b>{e.args[0]}</b> is not recognized in standard morse code")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Morse error",
-         repr(e))
+        return QMessageBox.critical(self, "Morse error", repr(e))
 
 def polybe(self, encrypt, text, key):
     try:
@@ -219,8 +226,7 @@ def polybe(self, encrypt, text, key):
         f"<b>{text[i:i+2]}</b> is out of grid.")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Polybe error",
-        repr(e))
+        return QMessageBox.critical(self, "Polybe error", repr(e))
 
 def adfgvx(self, encrypt, text, key):
     pass
