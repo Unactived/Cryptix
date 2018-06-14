@@ -16,6 +16,7 @@
 #
 # They should return a string
 
+import re
 from PySide2.QtWidgets import QMessageBox
 
 def _check_alphabet(text):
@@ -26,18 +27,23 @@ def _check_alphabet(text):
 
 def _create_alphabet(key):
     """
-    generate a transposition alphabet
+    generate a transposition alphabet, with numbers
 
     """
+    key = re.sub(r'[^a-zA-Z0-9]', '', key) # remove non alphanumeric
 
     alphabet = ''
-    for letter in key.upper():
-        # Avoid repetitions of letters
-        if letter.isalpha() and not letter in alphabet:
-            alphabet += letter
+    for char in key.upper():
+        # Avoid repetitions of characters
+        if char.isalnum() and not char in alphabet:
+            alphabet += char
     for i in range(65, 91):
         if not chr(i) in alphabet:
             alphabet += chr(i)
+
+    for i in range(10):
+        if not str(i) in alphabet:
+            alphabet += str(i)
 
     return alphabet
 
@@ -173,11 +179,8 @@ def morse(self, encrypt, text, key):
 
 def polybe(self, encrypt, text, key):
     try:
-        for char in key[:26]:
-            if not (ord(char.upper()) > 64 and ord(char.upper()) < 91):
-                return QMessageBox.warning(self, "Polybe warning",
-                "Key should only be composed of alphabetic letters.")
-        key = _create_alphabet(key.upper()[:26])
+        key = _create_alphabet(key)
+        key = re.sub(r'[0-9]', '', key)
 
         # Removing 'J' to get 25 letters
         # TODO: Choose this letter or offer to remove 'W' instead
