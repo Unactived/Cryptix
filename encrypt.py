@@ -150,6 +150,7 @@ def morse(self, encrypt, text, key):
             result = []
             textLines = text.split('\n')
             for line in textLines:
+                line = line.strip(' /')
                 resultLine = ''
                 textList = line.split('/')
                 for word in textList:
