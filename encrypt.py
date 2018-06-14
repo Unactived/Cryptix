@@ -171,31 +171,37 @@ def polybe(self, encrypt, text, key):
         # Removing 'J' to get 25 letters
         # TODO: Choose this letter or offer to remove 'W' instead
         key = key[:key.index('J')] + key[key.index('J')+1:]
-
-        polybe = []
-
-        # List of 5 lists of 5 characters
-        for i in range(5):
-            list = []
-            for y in range(5*i, 5*(i+1)):
-                list.append(key[y])
-            polybe.append(list)
+        print(key)
 
         result = ''
         if encrypt:
-            i = 0
             for char in text.upper():
                 if char == 'J':
                     char = 'I'
-                char = str((key.index(char)+1)//5 + 1) + str((key.index(char)+1)%5)
+                if char.isalpha():
+                    char = str((key.index(char)+1)//5 + 1) + str((key.index(char)+1)%5)
                 result += char
         else:
-            pass
+            polybe = []
+
+            # List of 5 lists of 5 characters
+            for i in range(5):
+                list = []
+                for y in range(5*i, 5*(i+1)):
+                    list.append(key[y])
+                polybe.append(list)
+            print(polybe)
             i = 0
             while i < len(text):
                 char = text[i]
+                print(text[i:i+2])
                 if char.isdigit():
-                    char = char
+                    char = polybe[int(text[i])-1][int(text[i+1])-1]
+                    i += 1
+                result += char
+                print(char)
+                i += 1
+
         return result
 
     except Exception as e:
