@@ -54,7 +54,8 @@ def caesar(self, encrypt, text, key):
         try:
             key = int(key)
         except ValueError:
-            return QMessageBox.warning(self, "Caesar Warning", "You should enter a valid number as key.")
+            return QMessageBox.warning(self, "Caesar Warning",
+            "You should enter a valid number as key.")
 
         if not encrypt:
             key = - key
@@ -245,12 +246,17 @@ def vigenere(self, encrypt, text, key):
         i = 0
         for letter in text.upper():
             if letter.isalpha():
-                letter = chr((ord(letter) +  (encrypt * ord(key[i])) - 130) % 26 + 65)
+                letter = chr((ord(letter) +  (encrypt * ord(key.upper()[i])) - 130) % 26 + 65)
             result += letter
             i += 1
             i %= len(key)
 
         return result
+
+    except IndexError as e:
+        # Error with the key
+        return QMessageBox.warning(self, "Vigenere error",
+        "You need to enter a valid key")
 
     except Exception as e:
         return QMessageBox.critical(self, "Vigenere error", repr(e))
