@@ -32,7 +32,8 @@ algoDict = {
     " and also encrypt digits."),
 
     'Vigenere': (encrypt.vigenere,
-    "Uses the key and a grid to encrypt."),
+    "Uses the letter in the key to shift (as in Caesar cipher) the letter"
+    " in the text. If it's shorter than the text, the key is repeated."),
 
     'Morse':    (encrypt.morse,
     "Transpose in standard morse code.")
