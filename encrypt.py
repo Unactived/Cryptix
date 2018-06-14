@@ -19,12 +19,6 @@
 import re
 from PySide2.QtWidgets import QMessageBox
 
-def _check_alphabet(text):
-    """
-    Checks that given text is
-
-    """
-
 def _create_alphabet(key):
     """
     generate a transposition alphabet, with numbers
@@ -197,7 +191,9 @@ def polybe(self, encrypt, text, key):
                     char = str((pos+1)//5 + 1 - ((pos+1)%5==0))+ str((pos+1)%5)
                 result += char
                 i += 1
+            result = re.sub('0', '5', result)
         else:
+            text = re.sub('0', '5', text)
             polybe = []
 
             # List of 5 lists of 5 characters
@@ -236,4 +232,25 @@ def adfgvx(self, encrypt, text, key):
     pass
 
 def vigenere(self, encrypt, text, key):
-    pass
+    """
+    Vigenere = Caesar with key's letters acting as the shift for the letters
+    in the text
+
+
+    """
+    try:
+        if not encrypt:
+            encrypt = -1
+        result = ''
+        i = 0
+        for letter in text.upper():
+            if letter.isalpha():
+                letter = chr((ord(letter) +  (encrypt * ord(key[i])) - 130) % 26 + 65)
+            result += letter
+            i += 1
+            i %= len(key)
+
+        return result
+
+    except Exception as e:
+        return QMessageBox.critical(self, "Vigenere error", repr(e))
