@@ -177,6 +177,7 @@ def polybe(self, encrypt, text, key):
 
         result = ''
         if encrypt:
+            i = 0 # for error handling
             for char in text.upper():
                 if char == 'J':
                     char = 'I'
@@ -184,6 +185,7 @@ def polybe(self, encrypt, text, key):
                     pos = key.index(char)
                     char = str((pos+1)//5 + 1 - ((pos+1)%5==0))+ str((pos+1)%5)
                 result += char
+                i += 1
         else:
             polybe = []
 
@@ -205,6 +207,16 @@ def polybe(self, encrypt, text, key):
                 i += 1
 
         return result
+
+    except ValueError:
+        # Not in grid (encrypt)
+        return QMessageBox.warning(self, "Polybe error",
+        f"<b>{text[i]}</b> is not valid.")
+
+    except IndexError:
+        # Invalid number (decrypt)
+        return QMessageBox.warning(self, "Polybe error",
+        f"<b>{text[i:i+2]}</b> is out of grid.")
 
     except Exception as e:
         return QMessageBox.critical(self, "Polybe error",
