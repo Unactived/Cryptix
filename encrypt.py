@@ -24,7 +24,7 @@ def _create_alphabet(key):
     generate a transposition alphabet, with numbers
 
     """
-    key = re.sub(r'[^a-zA-Z0-9]', '', key) # remove non alphanumeric
+    key = re.sub(r'[^a-zA-Z]', '', key) # remove non alphanumeric
 
     alphabet = ''
     for char in key.upper():
@@ -34,10 +34,6 @@ def _create_alphabet(key):
     for i in range(65, 91):
         if not chr(i) in alphabet:
             alphabet += chr(i)
-
-    for i in range(10):
-        if not str(i) in alphabet:
-            alphabet += str(i)
 
     return alphabet
 
@@ -175,18 +171,17 @@ def morse(self, encrypt, text, key):
 def polybe(self, encrypt, text, key):
     try:
         key = _create_alphabet(key)
-        key = re.sub(r'[0-9]', '', key)
 
-        # Removing 'J' to get 25 letters
-        # TODO: Choose this letter or offer to remove 'W' instead
-        key = key[:key.index('J')] + key[key.index('J')+1:]
+        # Removing 'W' to get 25 letters
+        # TODO: Choose this letter or offer to remove 'J' instead
+        key = key[:key.index('W')] + key[key.index('W')+1:]
 
         result = ''
         if encrypt:
             i = 0 # for error handling
             for char in text.upper():
-                if char == 'J':
-                    char = 'I'
+                if char == 'W':
+                    char = 'V'
                 if char.isalpha():
                     pos = key.index(char)
                     char = str((pos+1)//5 + 1 - ((pos+1)%5==0))+ str((pos+1)%5)
@@ -255,8 +250,29 @@ def vigenere(self, encrypt, text, key):
 
     except IndexError as e:
         # Error with the key
-        return QMessageBox.warning(self, "Vigenere error",
+        return QMessageBox.warning(self, "Vigenere warning",
         "You need to enter a valid key")
 
     except Exception as e:
         return QMessageBox.critical(self, "Vigenere error", repr(e))
+
+def wolseley(self, encrypt, text, key):
+    try:
+        key = _create_alphabet(key)
+        # Removes one letter
+        key = key[:key.index('W')] + key[key.index('W')+1:]
+        keyReverse = key[::-1]
+
+        if not encrypt:
+            key, keyReverse = keyReverse, key
+
+        result = ''
+        for letter in text.upper():
+            if letter.isalpha():
+                letter = keyReverse[key.find(letter)]
+            result += letter
+
+        return result
+
+    except Exception as e:
+        return QMessageBox.critical(self, "Wolseley error", repr(e))

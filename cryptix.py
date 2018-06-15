@@ -14,28 +14,31 @@ from PySide2.QtCore import QFile, QTextStream, Qt
 import encrypt
 
 algoDict = {
-    'Simple':   (encrypt.simple,
+    'Simple': (encrypt.simple,
     "Simply replace letters in the alphabet with those in the key."
     " You don't have to enter a complete one, as it will be generated from it."),
 
-    'Caesar':   (encrypt.caesar,
+    'Caesar': (encrypt.caesar,
     "Shifts the text's letter in the alphabet of the number given as key."),
 
-    'Polybe':   (encrypt.polybe,
+    'Polybe': (encrypt.polybe,
     "Replace letters by their abscissa and ordinate in a grid. If a key is"
     " given, it starts filling the grid, and finishes with the rest of the"
     " alphabet.\nThe second grid is an example with 'CRYPTIX' used as key."
     " As there are only 25 squares, J is removed and replaced with I."),
 
-    'ADFGVX':   (encrypt.adfgvx,
+    'ADFGVX': (encrypt.adfgvx,
     "Same as Polybe, but grid is indexed with these 6 letters,"
     " and also encrypt digits."),
+
+    'Wolseley': (encrypt.wolseley,
+    "Replaces letters with a reversed alphabet, missing a letter."),
 
     'Vigenere': (encrypt.vigenere,
     "Uses the letter in the key to shift (as in Caesar cipher) the letter"
     " in the text. If it's shorter than the text, the key is repeated."),
 
-    'Morse':    (encrypt.morse,
+    'Morse': (encrypt.morse,
     "Transpose in standard morse code.")
 }
 
