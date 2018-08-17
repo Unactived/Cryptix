@@ -241,7 +241,8 @@ def vigenere(self, encrypt, text, key):
         i = 0
         for letter in text.upper():
             if letter.isalpha():
-                letter = chr((ord(letter) +  (encrypt * ord(key.upper()[i])) - 130) % 26 + 65)
+                letter = chr((ord(letter)\
+                + (encrypt * ord(key.upper()[i])) - 130) % 26 + 65)
             result += letter
             i += 1
             i %= len(key)
@@ -276,3 +277,29 @@ def wolseley(self, encrypt, text, key):
 
     except Exception as e:
         return QMessageBox.critical(self, "Wolseley error", repr(e))
+
+def gronsfeld(self, encrypt, text, key):
+    try:
+        if not encrypt:
+            encrypt = -1
+        result = ''
+        i = 0
+        for letter in text.upper():
+            if letter.isalpha():
+                print(letter)
+                print(key[i])
+                letter = chr((ord(letter) +  (encrypt * int(key[i]) - 65)) % 26 + 65)
+                print(letter)
+            result += letter
+            i += 1
+            i %= len(key)
+
+        return result
+
+    except IndexError as e:
+        # Error with the key
+        return QMessageBox.warning(self, "Vigenere warning",
+        "You need to enter a valid number as key")
+
+    except Exception as e:
+        return QMessageBox.critical(self, "Vigenere error", repr(e))

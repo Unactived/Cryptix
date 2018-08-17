@@ -34,9 +34,15 @@ algoDict = {
     'Wolseley': (encrypt.wolseley,
     "Replaces letters with a reversed alphabet, missing a letter."),
 
+    'Gronsfeld': (encrypt.gronsfeld,
+    "Uses the digits in the key to shift (as in Caesar cipher)"
+    " the letters in the text. If it's shorter than the text,"
+    " the key is repeated."),
+
     'Vigenere': (encrypt.vigenere,
-    "Uses the letter in the key to shift (as in Caesar cipher) the letter"
-    " in the text. If it's shorter than the text, the key is repeated."),
+    "Uses the letters in the key to shift (as in Caesar cipher)"
+    " the letters in the text (A:0, B:1, Z:25). If it's shorter"
+    " than the text, the key is repeated."),
 
     'Morse': (encrypt.morse,
     "Transpose in standard morse code.")
@@ -233,4 +239,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     main = MainWindow()
     main.show()
+    print("Cryptix Version 0.2.1")
+    print("----------------------------------------\n")
     sys.exit(app.exec_())
