@@ -11,6 +11,7 @@ from PySide2.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QAction,
     QLineEdit, QDialog, QLabel, QApplication, QMessageBox, QFileDialog)
 from PySide2.QtGui import QIcon, QPixmap, QKeySequence
 from PySide2.QtCore import QFile, QTextStream, Qt
+
 import encrypt
 
 algoDict = {
@@ -45,7 +46,13 @@ algoDict = {
     " than the text, the key is repeated."),
 
     'Morse': (encrypt.morse,
-    "Transpose in standard morse code.")
+    "Transpose in standard morse code."),
+
+    'Affine': (encrypt.affine,
+    "Given a and b constants, x letter of the plain text and"
+    " y letter of the encrypted one, : y = ax + b (modulo 26).\n"
+    "Note that if a = 0, it's equivalent to Caesar cipher, and"
+    " if b = 0, 'A' is always ciphered 'A'")
 }
 
 class MainWindow(QMainWindow):
@@ -236,9 +243,24 @@ if __name__ == '__main__':
 
     import sys
 
+    title = r""" __________________________________________________________________________________________________
+|      ___           ___           ___           ___           ___                       ____      |
+|     /\  \         /\  \         |\__\         /\  \         /\  \           ___        |\__\     |
+|    /::\  \       /::\  \        |:|  |       /::\  \        \:\  \         /\  \       |:|  |    |
+|   /:/\:\  \     /:/\:\  \       |:|  |      /:/\:\  \        \:\  \        \:\  \      |:|  |    |
+|  /:/  \:\  \   /::\~\:\  \      |:|__|__   /::\~\:\  \       /::\  \       /::\__\     |:|__|__  |
+| /:/__/ \:\__\ /:/\:\ \:\__\     /::::\__\ /:/\:\ \:\__\     /:/\:\__\   __/:/\/__/ ____/::::\__\ |
+| \:\  \  \/__/ \/_|::\/:/  /    /:/~~/~    \/__\:\/:/  /    /:/  \/__/  /\/:/  /    \::::/~~/~    |
+|  \:\  \          |:|::/  /    /:/  /           \::/  /    /:/  /       \::/__/      ~~|:|~~|     |
+|   \:\  \         |:|\/__/     \/__/             \/__/     \/__/         \:\__\        |:|  |     |
+|    \:\__\        |:|  |                                                  \/__/        |:|  |     |
+|     \/__/         \|__|                                                                \|__|     |
+|__________________________________________________________________________________________________|"""
+
     app = QApplication(sys.argv)
     main = MainWindow()
     main.show()
-    print("Cryptix Version 0.2.1")
+    print(title)
+    print("Cryptix Version 0.3.0")
     print("----------------------------------------\n")
     sys.exit(app.exec_())

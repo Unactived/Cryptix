@@ -303,3 +303,6 @@ def gronsfeld(self, encrypt, text, key):
 
     except Exception as e:
         return QMessageBox.critical(self, "Vigenere error", repr(e))
+
+def affine(self, encrypt: bool, text: str, key: str):
+    pass
