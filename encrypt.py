@@ -37,10 +37,10 @@ def _create_alphabet(key):
 
     return alphabet
 
-def simple(self, encrypt, text, key):
+def simple(self, encrypt: bool, text: str, key: str):
     pass
 
-def caesar(self, encrypt, text, key):
+def caesar(self, encrypt: bool, text: str, key: str):
     """
     Replace each letter in the text by the letter
 
@@ -70,7 +70,7 @@ def caesar(self, encrypt, text, key):
     except Exception as e:
         return QMessageBox.critical(self, "Caesar error", repr(e))
 
-def morse(self, encrypt, text, key):
+def morse(self, encrypt: bool, text: str, key: str):
     morseCode = {
         "A": ".-",
         "B": "-...",
@@ -168,7 +168,7 @@ def morse(self, encrypt, text, key):
     except Exception as e:
         return QMessageBox.critical(self, "Morse error", repr(e))
 
-def polybe(self, encrypt, text, key):
+def polybe(self, encrypt: bool, text: str, key: str):
     try:
         key = _create_alphabet(key)
 
@@ -190,19 +190,13 @@ def polybe(self, encrypt, text, key):
             result = re.sub('0', '5', result)
         else:
             text = re.sub('0', '5', text)
-            polybe = []
 
-            # List of 5 lists of 5 characters
-            for i in range(5):
-                list = []
-                for y in range(5*i, 5*(i+1)):
-                    list.append(key[y])
-                polybe.append(list)
+            # List of 5 lists of 5            
+            polybe = [[key[y] for y in range(5*i, 5*(i+1))] for i in range(5)]
 
             i = 0
             while i < len(text):
                 char = text[i]
-                # print(text[i:i+2])
                 if char.isdigit():
                     char = polybe[int(text[i])-1][int(text[i+1])-1]
                     i += 1
@@ -224,10 +218,10 @@ def polybe(self, encrypt, text, key):
     except Exception as e:
         return QMessageBox.critical(self, "Polybe error", repr(e))
 
-def adfgvx(self, encrypt, text, key):
+def adfgvx(self, encrypt: bool, text: str, key: str):
     pass
 
-def vigenere(self, encrypt, text, key):
+def vigenere(self, encrypt: bool, text: str, key: str):
     """
     Vigenere = Caesar with key's letters acting as the shift for the letters
     in the text
@@ -257,7 +251,7 @@ def vigenere(self, encrypt, text, key):
     except Exception as e:
         return QMessageBox.critical(self, "Vigenere error", repr(e))
 
-def wolseley(self, encrypt, text, key):
+def wolseley(self, encrypt: bool, text: str, key: str):
     try:
         key = _create_alphabet(key)
         # Removes one letter
@@ -278,7 +272,7 @@ def wolseley(self, encrypt, text, key):
     except Exception as e:
         return QMessageBox.critical(self, "Wolseley error", repr(e))
 
-def gronsfeld(self, encrypt, text, key):
+def gronsfeld(self, encrypt: bool, text: str, key: str):
     try:
         if not encrypt:
             encrypt = -1
