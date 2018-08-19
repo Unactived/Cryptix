@@ -71,9 +71,7 @@ algoDict = {
     " added to the ciphered text. Here the number being 7,\nit will"
     " be ICQCKKK then QZSQZSS then KKCICEE etc. until the end.\n\n"
     "Notice that the ciphered text will be twice longer than the"
-    " plain one: ICQCKKKQZSQZSSKKCICEEZVQQVVQCS."),
-
-    
+    " plain one: ICQCKKKQZSQZSSKKCICEEZVQQVVQCS.")
 }
 
 class MainWindow(QMainWindow):
@@ -163,19 +161,20 @@ class MainWindow(QMainWindow):
         self.keyEdit = QLineEdit()
         self.keyEdit.setPlaceholderText('Key if needed')
 
-        self.keyTwoEdit = QLineEdit()
-        self.keyTwoEdit.setPlaceholderText('Second key if needed')
+        self.keyEdit2 = QLineEdit()
+        self.keyEdit2.setPlaceholderText('Second key if needed')
+        self.keyEdit2.setEnabled(False)
 
         self.encryptBtn = QPushButton('&Encrypt',
-        shortcut='Ctrl+E', clicked=self.encrypt)
+        shortcut='Ctrl+E', clicked=lambda: self.process(True))
 
         self.decryptBtn = QPushButton('&Decrypt',
-        shortcut='Ctrl+D', clicked=self.decrypt)
+        shortcut='Ctrl+D', clicked=lambda: self.process(False))
 
         layout.addWidget(self.encryptEdit, 0, 0)
         layout.addWidget(self.decryptEdit, 0, 1)
         layout.addWidget(self.keyEdit, 1, 0, 1, 2)
-        layout.addWidget(self.keyTwoEdit, 2, 0, 2, 2)
+        layout.addWidget(self.keyEdit2, 2, 0, 2, 2)
         layout.addWidget(self.encryptBtn, 4, 0)
         layout.addWidget(self.decryptBtn, 4, 1)
 
@@ -232,27 +231,27 @@ class MainWindow(QMainWindow):
         box.setLayout(layout)
         box.show()
 
-    def encrypt(self):
-        algo = self.algoCombo.currentText()
-        text = self.encryptEdit.toPlainText()
-        key = self.keyEdit.text()
+    def process(self, encrypt: bool):
+        args = [self, encrypt]
+        if encrypt:
+            args.append(self.encryptEdit.toPlainText())
+        else:
+            args.append(self.decryptEdit.toPlainText())
 
-        result = algoDict[algo][0](self, True, text, key)
+        algo = self.algoCombo.currentText()
+        if self.keyEdit.isEnabled():
+            args.append(self.keyEdit.text())
+        if self.keyEdit2.isEnabled():
+            args.append(self.keyEdit2.text())
+
+        result = algoDict[algo][0](*args)
 
         if type(result) == str:
             # Avoid erasing input if incorrect
-            self.decryptEdit.setPlainText(result)
-
-    def decrypt(self):
-        algo = self.algoCombo.currentText()
-        text = self.decryptEdit.toPlainText()
-        key = self.keyEdit.text()
-
-        result = algoDict[algo][0](self, False, text, key)
-
-        if type(result) == str:
-            # Avoid erasing input if incorrect
-            self.encryptEdit.setPlainText(result)
+            if encrypt:
+                self.decryptEdit.setPlainText(result)
+            else:
+                self.encryptEdit.setPlainText(result)
 
     def load_file(self, fileName):
         file = QFile(fileName)
@@ -273,6 +272,9 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     main = MainWindow()
     main.show()
+    # wid = QComboBox()
+    # for method in dir(wid):
+    #     if '__' not in method: print(method)
     # print(title)
     # print("Cryptix Version 0.3.0")
     # print("----------------------------------------\n")
