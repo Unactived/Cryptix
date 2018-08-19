@@ -48,7 +48,7 @@ def caesar(self, encrypt: bool, text: str, key: str):
     """
 
     try:
-        key = int(args[0])
+        key = int(key)
 
 
         if not encrypt:
@@ -172,7 +172,7 @@ def morse(self, encrypt: bool, text: str):
 
 def polybe(self, encrypt: bool, text: str, key: str):
     try:
-        key = _create_alphabet(args[0])
+        key = _create_alphabet(key)
 
         # Removing 'W' to get 25 letters
         # TODO: Choose this letter or offer to remove 'J' instead
@@ -231,7 +231,6 @@ def vigenere(self, encrypt: bool, text: str, key: str):
 
     """
     try:
-        key = args[0]
         if not encrypt:
             encrypt = -1
         result = ''
@@ -256,7 +255,7 @@ def vigenere(self, encrypt: bool, text: str, key: str):
 
 def wolseley(self, encrypt: bool, text: str, key: str):
     try:
-        key = _create_alphabet(args[0])
+        key = _create_alphabet(key)
         # Removes one letter
         key = key[:key.index('W')] + key[key.index('W')+1:]
         keyReverse = key[::-1]
@@ -277,7 +276,6 @@ def wolseley(self, encrypt: bool, text: str, key: str):
 
 def gronsfeld(self, encrypt: bool, text: str, key: str):
     try:
-        key = args[0]
         if not encrypt:
             encrypt = -1
         result = ''
@@ -304,7 +302,6 @@ def affine(self, encrypt: bool, text: str, key: str, key2: str):
 
 def beaufort(self, encrypt: bool, text: str, key: str):
     try:
-        key = args[0]
         result = ''
         i = 0
         for letter in text.upper():
