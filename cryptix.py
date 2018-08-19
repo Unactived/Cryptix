@@ -61,17 +61,17 @@ algoDict = {
 
     'Collon': (encrypt.collon,
     "With the help of the grid on the left (which you can generate"
-    " with the key), each letter is converted to a bigram ("
+    " with the key), each letter is converted to a bigram\n("
     "a group of two letters) representing the abscissa and ordinate"
-    " (or the ordinate and abscissa) in the grid. For instance,"
-    " X will become YZ (or ZY). The script will randomly alternate"
-    "these two options to renforce the cipher.\n"
+    " (or the ordinate and abscissa) in the grid.\nFor instance,"
+    " R will become CS (or SC). The script will randomly alternate"
+    "these two options to renforce the cipher.\n\n"
     "Then, each bigram is entered under the letter in the two lines,"
-    " and following a given number, the first and second line are"
-    " added to the ciphered text. Here the number being 7, it will"
-    " be .. then .. then .. etc. until th end.\n"
+    " and following a given number,\nthe first and second line are"
+    " added to the ciphered text. Here the number being 7,\nit will"
+    " be ICQCKKK then QZSQZSS then KKCICEE etc. until the end.\n\n"
     "Notice that the ciphered text will be twice longer than the"
-    " plain one."),
+    " plain one: ICQCKKKQZSQZSSKKCICEEZVQQVVQCS."),
 
     
 }
@@ -163,6 +163,9 @@ class MainWindow(QMainWindow):
         self.keyEdit = QLineEdit()
         self.keyEdit.setPlaceholderText('Key if needed')
 
+        self.keyTwoEdit = QLineEdit()
+        self.keyTwoEdit.setPlaceholderText('Second key if needed')
+
         self.encryptBtn = QPushButton('&Encrypt',
         shortcut='Ctrl+E', clicked=self.encrypt)
 
@@ -172,8 +175,9 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.encryptEdit, 0, 0)
         layout.addWidget(self.decryptEdit, 0, 1)
         layout.addWidget(self.keyEdit, 1, 0, 1, 2)
-        layout.addWidget(self.encryptBtn, 2, 0)
-        layout.addWidget(self.decryptBtn, 2, 1)
+        layout.addWidget(self.keyTwoEdit, 2, 0, 2, 2)
+        layout.addWidget(self.encryptBtn, 4, 0)
+        layout.addWidget(self.decryptBtn, 4, 1)
 
         self.cryptoBox.setLayout(layout)
 
@@ -198,8 +202,10 @@ class MainWindow(QMainWindow):
 
     def about(self):
         QMessageBox.about(self, "About Cryptix",
-                "<b>Cryptix</b> is a small tool for quick encrypting and"
-                " decrypting of small texts, using known basic methods.")
+                '<b>Cryptix</b> is a small tool for quick encrypting and'
+                ' decrypting of small texts, using known basic methods.'
+                ' It is developed by FrenchMasterSword and available on'
+                ' <a href="https://github.com/FrenchMasterSword/Cryptix">github</a>')
 
     def aboutQt(self):
         QMessageBox.aboutQt(self, "About Qt")
