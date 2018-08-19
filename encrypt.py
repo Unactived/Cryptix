@@ -12,7 +12,8 @@
 # a boolean : True => encrypt, False => decrypt
 # the text to process
 #
-# keys may be sent at the end and so in *args
+# depending of the cypher, one or two keys may also be necessary
+# this is used to control how many line fields should be editable.
 #
 # They should return a string, or an exception to be processed
 
@@ -37,10 +38,10 @@ def _create_alphabet(key: str) -> list:
 
     return alphabet
 
-def simple(self, encrypt: bool, text: str, *args):
+def simple(self, encrypt: bool, text: str, key: str):
     pass
 
-def caesar(self, encrypt: bool, text: str, *args):
+def caesar(self, encrypt: bool, text: str, key: str):
     """
     Replace each letter in the text by the letter
 
@@ -71,7 +72,7 @@ def caesar(self, encrypt: bool, text: str, *args):
     except Exception as e:
         return QMessageBox.critical(self, "Caesar error", repr(e))
 
-def morse(self, encrypt: bool, text: str, *args):
+def morse(self, encrypt: bool, text: str):
     morseCode = {
         "A": ".-",
         "B": "-...",
@@ -169,7 +170,7 @@ def morse(self, encrypt: bool, text: str, *args):
     except Exception as e:
         return QMessageBox.critical(self, "Morse error", repr(e))
 
-def polybe(self, encrypt: bool, text: str, *args):
+def polybe(self, encrypt: bool, text: str, key: str):
     try:
         key = _create_alphabet(args[0])
 
@@ -219,10 +220,10 @@ def polybe(self, encrypt: bool, text: str, *args):
     except Exception as e:
         return QMessageBox.critical(self, "Polybe error", repr(e))
 
-def adfgvx(self, encrypt: bool, text: str, *args):
+def adfgvx(self, encrypt: bool, text: str, key: str):
     pass
 
-def vigenere(self, encrypt: bool, text: str, *args):
+def vigenere(self, encrypt: bool, text: str, key: str):
     """
     Vigenere = Caesar with key's letters acting as the shift for the letters
     in the text
@@ -253,7 +254,7 @@ def vigenere(self, encrypt: bool, text: str, *args):
     except Exception as e:
         return QMessageBox.critical(self, "Error", repr(e))
 
-def wolseley(self, encrypt: bool, text: str, *args):
+def wolseley(self, encrypt: bool, text: str, key: str):
     try:
         key = _create_alphabet(args[0])
         # Removes one letter
@@ -274,7 +275,7 @@ def wolseley(self, encrypt: bool, text: str, *args):
     except Exception as e:
         return QMessageBox.critical(self, "Wolseley error", repr(e))
 
-def gronsfeld(self, encrypt: bool, text: str, *args):
+def gronsfeld(self, encrypt: bool, text: str, key: str):
     try:
         key = args[0]
         if not encrypt:
@@ -298,10 +299,10 @@ def gronsfeld(self, encrypt: bool, text: str, *args):
     except Exception as e:
         return QMessageBox.critical(self, "Gronsfeld error", repr(e))
 
-def affine(self, encrypt: bool, text: str, *args):
+def affine(self, encrypt: bool, text: str, key: str, key2: str):
     pass
 
-def beaufort(self, encrypt: bool, text: str, *args):
+def beaufort(self, encrypt: bool, text: str, key: str):
     try:
         key = args[0]
         result = ''
@@ -322,5 +323,5 @@ def beaufort(self, encrypt: bool, text: str, *args):
     except Exception as e:
         return QMessageBox.critical(self, "Beaufort Error", repr(e))
 
-def collon(self, encrypt: bool, text: str, *args):
+def collon(self, encrypt: bool, text: str, key: str):
     pass
