@@ -1,0 +1,18 @@
+<!DOCTYPE QPH>
+<QPH sourcelanguage="en_US" language="fr_FR">
+<phrase>
+    <source>Encrypt</source>
+    <target>Chiffrer</target>
+    <definition>Act of making a text incomprehensible for anyone except for the target reader.</definition>
+</phrase>
+<phrase>
+    <source>Decrypt</source>
+    <target>Déchiffrer</target>
+    <definition>Act of retrieving the original, readable text from its ciphered form.</definition>
+</phrase>
+<phrase>
+    <source>Key if needed</source>
+    <target>Clé si nécessaire</target>
+    <definition>Informs that a key can be entered if it is needed</definition>
+</phrase>
+</QPH>
