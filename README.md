@@ -42,12 +42,10 @@ Not necessarily, in the future there might be anything I find useful, like hashi
 
 * HayHanen microfilm
 
-* Merkle-Hellman
-* Rabin
-* RSA
+* Merkle-Hellman, Rabin, RSA
 
 * Pigpen
       Some image generation would be easy,
-      but analysing it would be way sharder
+      but analysing it would be way harder
 
 * Your suggestions (open an issue)
