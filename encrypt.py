@@ -19,7 +19,7 @@
 import re
 from PySide2.QtWidgets import QMessageBox
 
-def _create_alphabet(key):
+def _create_alphabet(key: str) -> list:
     """
     generate a transposition alphabet, with numbers
 
@@ -237,19 +237,19 @@ def vigenere(self, encrypt: bool, text: str, key: str):
             if letter.isalpha():
                 letter = chr((ord(letter)\
                 + (encrypt * ord(key.upper()[i])) - 130) % 26 + 65)
+                i += 1
+                i %= len(key)
             result += letter
-            i += 1
-            i %= len(key)
 
         return result
 
     except IndexError as e:
         # Error with the key
-        return QMessageBox.warning(self, "Vigenere warning",
+        return QMessageBox.warning(self, "Warning",
         "You need to enter a valid key")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Vigenere error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def wolseley(self, encrypt: bool, text: str, key: str):
     try:
@@ -280,10 +280,7 @@ def gronsfeld(self, encrypt: bool, text: str, key: str):
         i = 0
         for letter in text.upper():
             if letter.isalpha():
-                print(letter)
-                print(key[i])
                 letter = chr((ord(letter) +  (encrypt * int(key[i]) - 65)) % 26 + 65)
-                print(letter)
             result += letter
             i += 1
             i %= len(key)
@@ -292,11 +289,34 @@ def gronsfeld(self, encrypt: bool, text: str, key: str):
 
     except IndexError as e:
         # Error with the key
-        return QMessageBox.warning(self, "Vigenere warning",
+        return QMessageBox.warning(self, "Gronsfeld warning",
         "You need to enter a valid number as key")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Vigenere error", repr(e))
+        return QMessageBox.critical(self, "Gronsfeld error", repr(e))
 
 def affine(self, encrypt: bool, text: str, key: str):
+    pass
+
+def beaufort(self, encrypt: bool, text: str, key: str):
+    try:
+        result = ''
+        i = 0
+        for letter in text.upper():
+            if letter.isalpha():
+                letter = chr((ord(key.upper()[i]) - ord(letter) + 130) % 26 + 65)
+                i += 1
+                i %= len(key)
+            result += letter
+        return result
+
+    except IndexError as e:
+        # Error with the key
+        return QMessageBox.warning(self, "Beaufort Warning",
+        "You need to enter a valid key")
+
+    except Exception as e:
+        return QMessageBox.critical(self, "Beaufort Error", repr(e))
+
+def collon(self, encrypt: bool, text: str, key: str):
     pass

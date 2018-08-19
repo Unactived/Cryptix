@@ -52,7 +52,28 @@ algoDict = {
     "Given a and b constants, x letter of the plain text and"
     " y letter of the encrypted one, : y = ax + b (modulo 26).\n"
     "Note that if a = 0, it's equivalent to Caesar cipher, and"
-    " if b = 0, 'A' is always ciphered 'A'")
+    " if b = 0, 'A' is always ciphered 'A'"),
+
+    'Beaufort': (encrypt.beaufort,
+    "A bit like the opposite of Vigenere cipher. Instead of"
+    " adding the key's letters to those of the plain text ;"
+    " we substract the plain text's letters to those of the key"),
+
+    'Collon': (encrypt.collon,
+    "With the help of the grid on the left (which you can generate"
+    " with the key), each letter is converted to a bigram ("
+    "a group of two letters) representing the abscissa and ordinate"
+    " (or the ordinate and abscissa) in the grid. For instance,"
+    " X will become YZ (or ZY). The script will randomly alternate"
+    "these two options to renforce the cipher.\n"
+    "Then, each bigram is entered under the letter in the two lines,"
+    " and following a given number, the first and second line are"
+    " added to the ciphered text. Here the number being 7, it will"
+    " be .. then .. then .. etc. until th end.\n"
+    "Notice that the ciphered text will be twice longer than the"
+    " plain one."),
+
+    
 }
 
 class MainWindow(QMainWindow):
@@ -243,24 +264,10 @@ if __name__ == '__main__':
 
     import sys
 
-    title = r""" __________________________________________________________________________________________________
-|      ___           ___           ___           ___           ___                       ____      |
-|     /\  \         /\  \         |\__\         /\  \         /\  \           ___        |\__\     |
-|    /::\  \       /::\  \        |:|  |       /::\  \        \:\  \         /\  \       |:|  |    |
-|   /:/\:\  \     /:/\:\  \       |:|  |      /:/\:\  \        \:\  \        \:\  \      |:|  |    |
-|  /:/  \:\  \   /::\~\:\  \      |:|__|__   /::\~\:\  \       /::\  \       /::\__\     |:|__|__  |
-| /:/__/ \:\__\ /:/\:\ \:\__\     /::::\__\ /:/\:\ \:\__\     /:/\:\__\   __/:/\/__/ ____/::::\__\ |
-| \:\  \  \/__/ \/_|::\/:/  /    /:/~~/~    \/__\:\/:/  /    /:/  \/__/  /\/:/  /    \::::/~~/~    |
-|  \:\  \          |:|::/  /    /:/  /           \::/  /    /:/  /       \::/__/      ~~|:|~~|     |
-|   \:\  \         |:|\/__/     \/__/             \/__/     \/__/         \:\__\        |:|  |     |
-|    \:\__\        |:|  |                                                  \/__/        |:|  |     |
-|     \/__/         \|__|                                                                \|__|     |
-|__________________________________________________________________________________________________|"""
-
     app = QApplication(sys.argv)
     main = MainWindow()
     main.show()
-    print(title)
-    print("Cryptix Version 0.3.0")
-    print("----------------------------------------\n")
+    # print(title)
+    # print("Cryptix Version 0.3.0")
+    # print("----------------------------------------\n")
     sys.exit(app.exec_())
