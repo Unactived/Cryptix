@@ -179,7 +179,7 @@ def morse(self, encrypt: bool, text: str):
     except Exception as e:
         return QMessageBox.critical(self, "Morse error", repr(e))
 
-def polybe(self, encrypt: bool, text: str, key: str):
+def polybius(self, encrypt: bool, text: str, key: str):
     try:
         key = _create_alphabet(key)
 
@@ -202,13 +202,13 @@ def polybe(self, encrypt: bool, text: str, key: str):
             text = re.sub('0', '5', text)
 
             # List of 5 lists of 5
-            polybe = [[key[y] for y in range(5*i, 5*(i+1))] for i in range(5)]
+            polybius = [[key[y] for y in range(5*i, 5*(i+1))] for i in range(5)]
 
             i = 0
             while i < len(text):
                 char = text[i]
                 if char.isdigit():
-                    char = polybe[int(text[i])-1][int(text[i+1])-1]
+                    char = polybius[int(text[i])-1][int(text[i+1])-1]
                     i += 1
                 result += char
                 i += 1
@@ -217,16 +217,16 @@ def polybe(self, encrypt: bool, text: str, key: str):
 
     except ValueError:
         # Not in grid (encrypt)
-        return QMessageBox.warning(self, "Polybe error",
+        return QMessageBox.warning(self, "Polybius error",
         f"<b>{text[i]}</b> is not valid.")
 
     except IndexError:
         # Invalid number (decrypt)
-        return QMessageBox.warning(self, "Polybe error",
+        return QMessageBox.warning(self, "Polybius error",
         f"<b>{text[i:i+2]}</b> is out of grid.")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Polybe error", repr(e))
+        return QMessageBox.critical(self, "Polybius error", repr(e))
 
 def adfgvx(self, encrypt: bool, text: str, key: str):
     pass

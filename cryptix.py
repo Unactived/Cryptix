@@ -26,14 +26,14 @@ algoDict = {
     'Caesar': (encrypt.caesar,
     "Shifts the text's letter in the alphabet of the number given as key."),
 
-    'Polybe': (encrypt.polybe,
+    'Polybius': (encrypt.polybius,
     "Replace letters by their abscissa and ordinate in a grid. If a key is"
     " given, it starts filling the grid, and finishes with the rest of the"
     " alphabet.\nThe second grid is an example with 'CRYPTIX' used as key."
     " As there are only 25 squares, one letter is removed and replaced"),
 
     'ADFGVX': (encrypt.adfgvx,
-    "Same as Polybe, but grid is indexed with these 6 letters,"
+    "Same as Polybius, but grid is indexed with these 6 letters,"
     " and also encrypt digits."),
 
     'Wolseley': (encrypt.wolseley,
