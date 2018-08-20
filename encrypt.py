@@ -345,6 +345,20 @@ def beaufort(self, encrypt: bool, text: str, key: str):
 def collon(self, encrypt: bool, text: str, key: str, key2: str):
     try:
         key2 = int(key2)
+        key = _create_alphabet(key)
+        # Removing one letter to make 25
+        key = key[:key.index(UNUSED)] + key[key.index(UNUSED)+1:]
+
+        # 5x5 grid
+        # grid = [[key[y] for y in range(5*i, 5*(i+1))] for i in range(5)]
+
+        for letter in text.upper():
+            if letter.isalpha():
+                pos = key.index(letter)
+                location = [(pos)//5 - ((pos)%5==0), (pos)%5]
+                print(location)
+
+
 
     except Exception as e:
         return QMessageBox.critical(self, "Beaufort Error", repr(e))
