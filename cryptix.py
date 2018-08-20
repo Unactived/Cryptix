@@ -139,6 +139,7 @@ class MainWindow(QMainWindow):
 
         self.algoCombo = QComboBox()
         self.algoCombo.addItems([*algoDict])
+        self.algoCombo.activated.connect(self.change_keys)
 
         self.algoHelp = QPushButton('&Reminder',
         shortcut='Ctrl+R', clicked=self.reminder)
@@ -163,7 +164,7 @@ class MainWindow(QMainWindow):
 
         self.keyEdit2 = QLineEdit()
         self.keyEdit2.setPlaceholderText('Second key if needed')
-        self.keyEdit2.setEnabled(False)
+        self.keyEdit2.setEnabled(False) # The first cipher needs one key
 
         self.encryptBtn = QPushButton('&Encrypt',
         shortcut='Ctrl+E', clicked=lambda: self.process(True))
@@ -252,6 +253,17 @@ class MainWindow(QMainWindow):
                 self.decryptEdit.setPlainText(result)
             else:
                 self.encryptEdit.setPlainText(result)
+
+    def change_keys(self):
+        if 'key' in algoDict[self.algoCombo.currentText()][0].__annotations__:
+        #and not self.keyEdit.isEnabled()
+            self.keyEdit.setEnabled(True)
+        else:
+            self.keyEdit.setEnabled(False)
+        if 'key2' in algoDict[self.algoCombo.currentText()][0].__annotations__:
+            self.keyEdit2.setEnabled(True)
+        else:
+            self.keyEdit2.setEnabled(False)
 
     def load_file(self, fileName):
         file = QFile(fileName)

@@ -14,6 +14,7 @@
 #
 # depending of the cypher, one or two keys may also be necessary
 # this is used to control how many line fields should be editable.
+# they should then be called key and key2
 #
 # They should return a string, or an exception to be processed
 
