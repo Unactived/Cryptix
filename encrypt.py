@@ -19,6 +19,7 @@
 # They should return a string, or an exception to be processed
 
 import re
+import json
 # from math import ceil
 from PySide2.QtWidgets import QMessageBox
 
@@ -26,6 +27,8 @@ with open('settings.json', 'r') as file:
     settingsDict = json.load(file)
 
 UNUSED = settingsDict["removed letter"]
+REPLACED = settingsDict["replace letter"]
+
 def _create_alphabet(key: str) -> list:
     """
     generate a transposition alphabet, with numbers
@@ -303,7 +306,21 @@ def gronsfeld(self, encrypt: bool, text: str, key: str):
         return QMessageBox.critical(self, "Gronsfeld error", repr(e))
 
 def affine(self, encrypt: bool, text: str, key: str, key2: str):
-    pass
+    try:
+        key, key2 = int(key), int(key2)
+        result = ''
+        for letter in text.upper():
+            if letter.isalpha():
+                letter = ord(letter) - 65
+                if encrypt:
+                    letter = letter * key + key2
+                else:
+                    letter = (letter - key2) // key
+                letter = chr(letter % 26 + 65)
+            result += letter
+        return result
+    except Exception as e:
+        return QMessageBox.critical(self, "Affine Error", repr(e))
 
 def beaufort(self, encrypt: bool, text: str, key: str):
     try:
@@ -325,5 +342,9 @@ def beaufort(self, encrypt: bool, text: str, key: str):
     except Exception as e:
         return QMessageBox.critical(self, "Beaufort Error", repr(e))
 
-def collon(self, encrypt: bool, text: str, key: str):
-    pass
+def collon(self, encrypt: bool, text: str, key: str, key2: str):
+    try:
+        key2 = int(key2)
+
+    except Exception as e:
+        return QMessageBox.critical(self, "Beaufort Error", repr(e))
