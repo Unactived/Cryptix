@@ -19,8 +19,13 @@
 # They should return a string, or an exception to be processed
 
 import re
+# from math import ceil
 from PySide2.QtWidgets import QMessageBox
 
+with open('settings.json', 'r') as file:
+    settingsDict = json.load(file)
+
+UNUSED = settingsDict["removed letter"]
 def _create_alphabet(key: str) -> list:
     """
     generate a transposition alphabet, with numbers
@@ -175,16 +180,15 @@ def polybe(self, encrypt: bool, text: str, key: str):
     try:
         key = _create_alphabet(key)
 
-        # Removing 'W' to get 25 letters
-        # TODO: Choose this letter or offer to remove 'J' instead
-        key = key[:key.index('W')] + key[key.index('W')+1:]
+        # Removing one letter to make 25
+        key = key[:key.index(UNUSED)] + key[key.index(UNUSED)+1:]
 
         result = ''
         if encrypt:
             i = 0 # for error handling
             for char in text.upper():
-                if char == 'W':
-                    char = 'V'
+                if char == UNUSED:
+                    char = REPLACED
                 if char.isalpha():
                     pos = key.index(char)
                     char = str((pos+1)//5 + 1 - ((pos+1)%5==0))+ str((pos+1)%5)
@@ -246,7 +250,7 @@ def vigenere(self, encrypt: bool, text: str, key: str):
 
         return result
 
-    except IndexError as e:
+    except IndexError:
         # Error with the key
         return QMessageBox.warning(self, "Warning",
         "You need to enter a valid key")
@@ -257,8 +261,8 @@ def vigenere(self, encrypt: bool, text: str, key: str):
 def wolseley(self, encrypt: bool, text: str, key: str):
     try:
         key = _create_alphabet(key)
-        # Removes one letter
-        key = key[:key.index('W')] + key[key.index('W')+1:]
+        # Removing one letter to make 25
+        key = key[:key.index(UNUSED)] + key[key.index(UNUSED)+1:]
         keyReverse = key[::-1]
 
         if not encrypt:
@@ -290,7 +294,7 @@ def gronsfeld(self, encrypt: bool, text: str, key: str):
 
         return result
 
-    except IndexError as e:
+    except IndexError:
         # Error with the key
         return QMessageBox.warning(self, "Gronsfeld warning",
         "You need to enter a valid number as key")
@@ -313,7 +317,7 @@ def beaufort(self, encrypt: bool, text: str, key: str):
             result += letter
         return result
 
-    except IndexError as e:
+    except IndexError:
         # Error with the key
         return QMessageBox.warning(self, "Beaufort Warning",
         "You need to enter a valid key")

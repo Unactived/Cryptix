@@ -6,6 +6,7 @@
 # FrenchMasterSword, Cryptix, 2018
 #####################################################################
 
+import json
 from PySide2.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QAction,
     QGroupBox, QHBoxLayout, QComboBox, QPushButton, QGridLayout, QTextEdit,
     QLineEdit, QDialog, QLabel, QApplication, QMessageBox, QFileDialog)
@@ -13,6 +14,9 @@ from PySide2.QtGui import QIcon, QPixmap, QKeySequence
 from PySide2.QtCore import QFile, QTextStream, Qt
 
 import encrypt
+
+with open('settings.json', 'r') as file:
+    settingsDict = json.load(file)
 
 algoDict = {
     'Simple': (encrypt.simple,
@@ -26,7 +30,7 @@ algoDict = {
     "Replace letters by their abscissa and ordinate in a grid. If a key is"
     " given, it starts filling the grid, and finishes with the rest of the"
     " alphabet.\nThe second grid is an example with 'CRYPTIX' used as key."
-    " As there are only 25 squares, J is removed and replaced with I."),
+    " As there are only 25 squares, one letter is removed and replaced"),
 
     'ADFGVX': (encrypt.adfgvx,
     "Same as Polybe, but grid is indexed with these 6 letters,"
@@ -129,6 +133,9 @@ class MainWindow(QMainWindow):
         self.helpMenu.addSeparator();
         self.helpMenu.addAction(self.aboutAct)
         self.helpMenu.addAction(self.aboutQtAct)
+
+        self.settingsMenu = self.menuBar().addMenu('&Settings')
+        # self.settingsMenu.addAction()
 
     def create_status_bar(self):
         self.statusBar().showMessage("Ready")
