@@ -11,7 +11,7 @@ from PySide2.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QAction,
     QGroupBox, QHBoxLayout, QComboBox, QPushButton, QGridLayout, QTextEdit,
     QLineEdit, QDialog, QLabel, QApplication, QMessageBox, QFileDialog)
 from PySide2.QtGui import QIcon, QPixmap, QKeySequence
-from PySide2.QtCore import QFile, QTextStream, Qt
+from PySide2.QtCore import QFile, QTextStream, Qt, QTranslator, QLocale
 
 import encrypt
 
@@ -289,6 +289,12 @@ if __name__ == '__main__':
     import sys
 
     app = QApplication(sys.argv)
+
+    french = QTranslator()
+
+    if french.load("fr_fr", "translations"):
+        app.installTranslator(french)
+
     main = MainWindow()
     main.show()
     # wid = QComboBox()

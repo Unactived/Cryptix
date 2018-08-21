@@ -1,0 +1,67 @@
+<!DOCTYPE QPH>
+<QPH sourcelanguage="en_US" language="fr_FR">
+<phrase>
+    <source>Encrypt</source>
+    <target>Chiffrer</target>
+    <definition>Act of making a text incomprehensible for anyone except for the target reader.</definition>
+</phrase>
+<phrase>
+    <source>Decrypt</source>
+    <target>Déchiffrer</target>
+    <definition>Act of retrieving the original, readable text from its ciphered form.</definition>
+</phrase>
+<phrase>
+    <source>Key if needed</source>
+    <target>Clé si nécessaire</target>
+    <definition>Informs that a key can be entered if it is needed</definition>
+</phrase>
+<phrase>
+    <source>Second key if needed</source>
+    <target>Seconde clé si nécessaire</target>
+    <definition>Informs that a key can be entered if it is needed</definition>
+</phrase>
+<phrase>
+    <source>Caesar</source>
+    <target>César</target>
+</phrase>
+<phrase>
+    <source>Polybius</source>
+    <target>Polybe</target>
+</phrase>
+<phrase>
+    <source>Vigenere</source>
+    <target>Vigenère</target>
+</phrase>
+<phrase>
+    <source>About</source>
+    <target>A propos</target>
+</phrase>
+<phrase>
+    <source>Reminder</source>
+    <target>Rappel</target>
+</phrase>
+<phrase>
+    <source>Settings</source>
+    <target>Réglages</target>
+</phrase>
+<phrase>
+    <source>File</source>
+    <target>Fichier</target>
+</phrase>
+<phrase>
+    <source>Help</source>
+    <target>Aide</target>
+</phrase>
+<phrase>
+    <source>Open</source>
+    <target>Ouvrir</target>
+</phrase>
+<phrase>
+    <source>Simply replace letters in the alphabet with those in the key.</source>
+    <target>Remplace simplement les lettres du texte par celles de la clé.</target>
+</phrase>
+<phrase>
+    <source>You don&apos;t have to enter a complete one, as it will be generated from it.</source>
+    <target>Vous n&apos;avez pas besoin d&apos;en entrer une complète étant donné qu&apos;elle sera générée à partir de l&apos;entrée.</target>
+</phrase>
+</QPH>
