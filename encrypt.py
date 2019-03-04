@@ -18,8 +18,10 @@
 #
 # They should return a string, or an exception to be processed
 
-import re
 import json
+import re
+from itertools import cycle
+from string import ascii_letters
 # from math import ceil
 from PySide2.QtWidgets import QMessageBox
 
@@ -29,7 +31,10 @@ with open('settings.json', 'r') as file:
 UNUSED = settingsDict["removed letter"]
 REPLACED = settingsDict["replace letter"]
 
-def _create_alphabet(key: str) -> list:
+def _isascii(string: str):
+    return all((char in ascii_letters for char in string))
+
+def _create_alphabet(key: str, polybius=False) -> list:
     """
     generate a transposition alphabet, with numbers
 
@@ -45,7 +50,10 @@ def _create_alphabet(key: str) -> list:
         if not chr(i) in alphabet:
             alphabet += chr(i)
 
-    return alphabet
+    if not polybius:
+        return alphabet
+
+    return alphabet.replace(UNUSED, '')
 
 def simple(self, encrypt: bool, text: str, key: str):
     pass
@@ -64,7 +72,7 @@ def caesar(self, encrypt: bool, text: str, key: str):
             key = - key
         result = ''
         for char in text:
-            if char.isalpha():
+            if _isascii(char):
                 letter = char.upper()
                 letter = chr((ord(letter) - 65 + key) % 26 + 65)
                 if char.islower():
@@ -75,11 +83,11 @@ def caesar(self, encrypt: bool, text: str, key: str):
         return result
 
     except ValueError:
-        return QMessageBox.warning(self, "Caesar Warning",
-        "You should enter a valid number as key.")
+        return QMessageBox.warning(self, "Warning",
+        "You should enter a valid integer as the key.")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Caesar error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def morse(self, encrypt: bool, text: str):
     morseCode = {
@@ -93,7 +101,6 @@ def morse(self, encrypt: bool, text: str):
         "H": "....",
         "I": "..",
         "J": ".---",
-        "K": "-.-",
         "K": "-.-",
         "L": ".-..",
         "M": "--",
@@ -173,18 +180,15 @@ def morse(self, encrypt: bool, text: str):
         return result
 
     except KeyError as e:
-        return QMessageBox.warning(self, "Morse error",
+        return QMessageBox.warning(self, "Error",
         f"<b>{e.args[0]}</b> is not recognized in standard morse code")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Morse error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def polybius(self, encrypt: bool, text: str, key: str):
     try:
-        key = _create_alphabet(key)
-
-        # Removing one letter to make 25
-        key = key[:key.index(UNUSED)] + key[key.index(UNUSED)+1:]
+        key = _create_alphabet(key, True)
 
         result = ''
         if encrypt:
@@ -192,7 +196,7 @@ def polybius(self, encrypt: bool, text: str, key: str):
             for char in text.upper():
                 if char == UNUSED:
                     char = REPLACED
-                if char.isalpha():
+                if _isascii(char):
                     pos = key.index(char)
                     char = str((pos+1)//5 + 1 - ((pos+1)%5==0))+ str((pos+1)%5)
                 result += char
@@ -217,16 +221,16 @@ def polybius(self, encrypt: bool, text: str, key: str):
 
     except ValueError:
         # Not in grid (encrypt)
-        return QMessageBox.warning(self, "Polybius error",
-        f"<b>{text[i]}</b> is not valid.")
+        return QMessageBox.warning(self, "Error",
+        f"Use only standard alphabet letters ; <b>{text[i]}</b> is not valid.")
 
     except IndexError:
         # Invalid number (decrypt)
-        return QMessageBox.warning(self, "Polybius error",
+        return QMessageBox.warning(self, "Error",
         f"<b>{text[i:i+2]}</b> is out of grid.")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Polybius error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def adfgvx(self, encrypt: bool, text: str, key: str):
     pass
@@ -242,13 +246,10 @@ def vigenere(self, encrypt: bool, text: str, key: str):
         if not encrypt:
             encrypt = -1
         result = ''
-        i = 0
+        key = cycle(key.upper())
         for letter in text.upper():
-            if letter.isalpha():
-                letter = chr((ord(letter)\
-                + (encrypt * ord(key.upper()[i])) - 130) % 26 + 65)
-                i += 1
-                i %= len(key)
+            if _isascii(letter):
+                letter = chr((ord(letter) + (encrypt * ord(next(key))) - 130) % 26 + 65)
             result += letter
 
         return result
@@ -263,9 +264,7 @@ def vigenere(self, encrypt: bool, text: str, key: str):
 
 def wolseley(self, encrypt: bool, text: str, key: str):
     try:
-        key = _create_alphabet(key)
-        # Removing one letter to make 25
-        key = key[:key.index(UNUSED)] + key[key.index(UNUSED)+1:]
+        key = _create_alphabet(key, True)
         keyReverse = key[::-1]
 
         if not encrypt:
@@ -273,44 +272,42 @@ def wolseley(self, encrypt: bool, text: str, key: str):
 
         result = ''
         for letter in text.upper():
-            if letter.isalpha():
+            if _isascii(letter):
                 letter = keyReverse[key.find(letter)]
             result += letter
 
         return result
 
     except Exception as e:
-        return QMessageBox.critical(self, "Wolseley error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def gronsfeld(self, encrypt: bool, text: str, key: str):
     try:
         if not encrypt:
             encrypt = -1
         result = ''
-        i = 0
+        key = cycle((int(i) for i in key))
         for letter in text.upper():
-            if letter.isalpha():
-                letter = chr((ord(letter) +  (encrypt * int(key[i]) - 65)) % 26 + 65)
+            if _isascii(letter):
+                letter = chr((ord(letter) +  (encrypt * next(key) - 65)) % 26 + 65)
             result += letter
-            i += 1
-            i %= len(key)
 
         return result
 
-    except IndexError:
+    except ValueError:
         # Error with the key
-        return QMessageBox.warning(self, "Gronsfeld warning",
-        "You need to enter a valid number as key")
+        return QMessageBox.warning(self, "Warning",
+        "You need to enter a valid positive integer as the key")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Gronsfeld error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def affine(self, encrypt: bool, text: str, key: str, key2: str):
     try:
         key, key2 = int(key), int(key2)
         result = ''
         for letter in text.upper():
-            if letter.isalpha():
+            if _isascii(letter):
                 letter = ord(letter) - 65
                 if encrypt:
                     letter = letter * key + key2
@@ -320,45 +317,39 @@ def affine(self, encrypt: bool, text: str, key: str, key2: str):
             result += letter
         return result
     except Exception as e:
-        return QMessageBox.critical(self, "Affine Error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def beaufort(self, encrypt: bool, text: str, key: str):
     try:
         result = ''
-        i = 0
+        key = cycle((ord(k) for k in key.upper()))
         for letter in text.upper():
-            if letter.isalpha():
-                letter = chr((ord(key.upper()[i]) - ord(letter) + 130) % 26 + 65)
-                i += 1
-                i %= len(key)
+            if _isascii(letter):
+                letter = chr((next(key) - ord(letter) + 130) % 26 + 65)
             result += letter
         return result
 
     except IndexError:
         # Error with the key
-        return QMessageBox.warning(self, "Beaufort Warning",
+        return QMessageBox.warning(self, "Warning",
         "You need to enter a valid key")
 
     except Exception as e:
-        return QMessageBox.critical(self, "Beaufort Error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
 
 def collon(self, encrypt: bool, text: str, key: str, key2: str):
     try:
         key2 = int(key2)
-        key = _create_alphabet(key)
-        # Removing one letter to make 25
-        key = key[:key.index(UNUSED)] + key[key.index(UNUSED)+1:]
+        key = _create_alphabet(key, True)
 
         # 5x5 grid
         # grid = [[key[y] for y in range(5*i, 5*(i+1))] for i in range(5)]
 
         for letter in text.upper():
-            if letter.isalpha():
+            if _isascii(letter):
                 pos = key.index(letter)
                 location = [(pos)//5 - ((pos)%5==0), (pos)%5]
                 print(location)
 
-
-
     except Exception as e:
-        return QMessageBox.critical(self, "Beaufort Error", repr(e))
+        return QMessageBox.critical(self, "Error", repr(e))
