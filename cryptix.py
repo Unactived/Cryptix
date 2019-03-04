@@ -130,7 +130,7 @@ class MainWindow(QMainWindow):
 
         self.helpMenu = self.menuBar().addMenu('&Help')
         self.helpMenu.addAction(self.guideAct)
-        self.helpMenu.addSeparator();
+        self.helpMenu.addSeparator()
         self.helpMenu.addAction(self.aboutAct)
         self.helpMenu.addAction(self.aboutQtAct)
 
@@ -189,7 +189,7 @@ class MainWindow(QMainWindow):
         self.cryptoBox.setLayout(layout)
 
     def open(self):
-        fileName, filtr = QFileDialog.getOpenFileName(self)
+        fileName, _ = QFileDialog.getOpenFileName(self)
         if fileName:
             self.load_file(fileName)
 
