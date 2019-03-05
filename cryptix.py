@@ -19,63 +19,17 @@ with open('settings.json', 'r') as file:
     settingsDict = json.load(file)
 
 algoDict = {
-    'Simple': (encrypt.simple,
-    "Simply replace letters in the alphabet with those in the key."
-    " You don't have to enter a complete one, as it will be generated from it."),
-
-    'Caesar': (encrypt.caesar,
-    "Shifts the text's letter in the alphabet of the number given as key."),
-
-    'Polybius': (encrypt.polybius,
-    "Replace letters by their abscissa and ordinate in a grid. If a key is"
-    " given, it starts filling the grid, and finishes with the rest of the"
-    " alphabet.\nThe second grid is an example with 'CRYPTIX' used as key."
-    " As there are only 25 squares, one letter is removed and replaced"),
-
-    'ADFGVX': (encrypt.adfgvx,
-    "Same as Polybius, but grid is indexed with these 6 letters,"
-    " and also encrypt digits."),
-
-    'Wolseley': (encrypt.wolseley,
-    "Replaces letters with a reversed alphabet, missing a letter."),
-
-    'Gronsfeld': (encrypt.gronsfeld,
-    "Uses the digits in the key to shift (as in Caesar cipher)"
-    " the letters in the text. If it's shorter than the text,"
-    " the key is repeated."),
-
-    'Vigenere': (encrypt.vigenere,
-    "Uses the letters in the key to shift (as in Caesar cipher)"
-    " the letters in the text (A:0, B:1, Z:25). If it's shorter"
-    " than the text, the key is repeated."),
-
-    'Morse': (encrypt.morse,
-    "Transpose in standard morse code."),
-
-    'Affine': (encrypt.affine,
-    "Given a and b constants, x letter of the plain text and"
-    " y letter of the encrypted one, : y = ax + b (modulo 26).\n"
-    "Note that if a = 0, it's equivalent to Caesar cipher, and"
-    " if b = 0, 'A' is always ciphered 'A'"),
-
-    'Beaufort': (encrypt.beaufort,
-    "A bit like the opposite of Vigenere cipher. Instead of"
-    " adding the key's letters to those of the plain text ;"
-    " we substract the plain text's letters to those of the key"),
-
-    'Collon': (encrypt.collon,
-    "With the help of the grid on the left (which you can generate"
-    " with the key), each letter is converted to a bigram\n("
-    "a group of two letters) representing the abscissa and ordinate"
-    " (or the ordinate and abscissa) in the grid.\nFor instance,"
-    " R will become CS (or SC). The script will randomly alternate"
-    "these two options to renforce the cipher.\n\n"
-    "Then, each bigram is entered under the letter in the two lines,"
-    " and following a given number,\nthe first and second line are"
-    " added to the ciphered text. Here the number being 7,\nit will"
-    " be ICQCKKK then QZSQZSS then KKCICEE etc. until the end.\n\n"
-    "Notice that the ciphered text will be twice longer than the"
-    " plain one: ICQCKKKQZSQZSSKKCICEEZVQQVVQCS.")
+    'Simple': encrypt.simple,
+    'Wolseley': encrypt.wolseley,
+    'Caesar': encrypt.caesar,
+    'Affine': encrypt.affine,
+    'Polybius': encrypt.polybius,
+    'ADFGVX': encrypt.adfgvx,
+    'Vigenere': encrypt.vigenere,
+    'Gronsfeld': encrypt.gronsfeld,
+    'Beaufort': encrypt.beaufort,
+    'Collon': encrypt.collon,
+    'Morse': encrypt.morse,
 }
 
 class MainWindow(QMainWindow):
@@ -227,7 +181,7 @@ class MainWindow(QMainWindow):
         labelImage.setPixmap(pixmap)
         labelImage.setAlignment(Qt.AlignHCenter)
 
-        labelText = QLabel(algoDict[algo][1])
+        labelText = QLabel(algoDict[algo].__doc__)
         labelText.setAlignment(Qt.AlignJustify)
 
         box.setWindowTitle(f"{algo} reminder")
@@ -262,12 +216,12 @@ class MainWindow(QMainWindow):
                 self.encryptEdit.setPlainText(result)
 
     def change_keys(self):
-        if 'key' in algoDict[self.algoCombo.currentText()][0].__annotations__:
-        #and not self.keyEdit.isEnabled()
+        if 'key' in algoDict[self.algoCombo.currentText()].__annotations__:
+        # qand not self.keyEdit.isEnabled()
             self.keyEdit.setEnabled(True)
         else:
             self.keyEdit.setEnabled(False)
-        if 'key2' in algoDict[self.algoCombo.currentText()][0].__annotations__:
+        if 'key2' in algoDict[self.algoCombo.currentText()].__annotations__:
             self.keyEdit2.setEnabled(True)
         else:
             self.keyEdit2.setEnabled(False)
